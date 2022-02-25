@@ -116,6 +116,7 @@ func (entry *Entry) WithContext(ctx context.Context) *Entry {
 
 	ctxEntry := &Entry{Logger: entry.Logger, Data: dataCopy, Time: entry.Time, err: entry.err, Context: ctx}
 
+	// tang change
 	if ctx.Value("request_id") != nil {
 		ctxEntry = ctxEntry.WithField("request_id", ctx.Value("request_id"))
 	}
