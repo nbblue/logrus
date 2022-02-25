@@ -113,7 +113,18 @@ func (entry *Entry) WithContext(ctx context.Context) *Entry {
 	for k, v := range entry.Data {
 		dataCopy[k] = v
 	}
-	return &Entry{Logger: entry.Logger, Data: dataCopy, Time: entry.Time, err: entry.err, Context: ctx}
+
+	ctxEntry := &Entry{Logger: entry.Logger, Data: dataCopy, Time: entry.Time, err: entry.err, Context: ctx}
+
+	if ctx.Value("request_id") != nil {
+		ctxEntry = ctxEntry.WithField("request_id", ctx.Value("request_id"))
+	}
+
+	if ctx.Value("parent_request_id") != nil {
+		ctxEntry = ctxEntry.WithField("parent_request_id", ctx.Value("parent_request_id"))
+	}
+
+	return ctxEntry
 }
 
 // Add a single field to the Entry.
